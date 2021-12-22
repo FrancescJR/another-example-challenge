@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cesc\CMRad\Domain\Subject;
 
-class Subject
+final class Subject
 {
     public function __construct(
         private SubjectId $id,

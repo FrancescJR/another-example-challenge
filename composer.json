@@ -13,6 +13,9 @@
       "Cesc\\CMRad\\Tests\\": "tests/"
     }
   },
+  "config": {
+    "bin-dir": "bin"
+  },
   "require": {
     "php": "^8.1",
     "symfony/config": "^5.4",
@@ -21,7 +24,27 @@
     "ramsey/uuid": "^4.2"
   },
   "require-dev": {
-    "fakerphp/faker": "^1.16",
-    "phpunit/phpunit": "^9.5"
+    "phpunit/phpunit": "^9.5",
+    "fakerphp/faker": "^1.17"
+  },
+  "scripts": {
+    "destroy": [
+      "docker-compose --file docker/docker-compose.yml down",
+      "docker-compose --file docker/docker-compose.yml rm -f",
+      "docker volume rm offer-persistence"
+    ],
+    "enter": "docker exec -it collective-minds-subjects bash",
+    "stop": "docker-compose --file docker/docker-compose.yml stop",
+    "logs": "docker-compose --file docker/docker-compose.yml logs -f",
+    "services": "docker-compose --file docker/docker-compose.yml ps",
+    "test": [
+      "@test.application",
+      "@test.domain",
+      "@test.infrastructure"
+    ],
+    "test.application": "docker exec -it collective-minds-subjects ./bin/phpunit --testsuite=application --exclude-group=ignore --testdox",
+    "test.domain": "docker exec -it collective-minds-subjects ./bin/phpunit --testsuite=domain --exclude-group=ignore --testdox",
+    "test.infrastructure": "docker exec -it collective-minds-subjects ./bin/phpunit --testsuite=infrastructure --exclude-group=ignore --testdox",
+    "volumes": "docker-compose --file docker/docker-compose.yml volume ls"
   }
 }

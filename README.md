@@ -42,3 +42,13 @@ If that is the actual fear. (You can just have a proxy for the same, but
 insisting again and being very adamant, this proxy should not have any 
 business logic)
 
+## About the diagram.
+
+There are two extra numbers on the 
+repository subject relationship, I believe those
+are leftovers from a previous diagram. The relationship
+between projects and subjects, it's specified as at least 1..*
+on each direction. That means that a subject can not exist without
+a project and viceversa, a project can not exist without a
+subject. I'd recommend to change that to 0..*.
+

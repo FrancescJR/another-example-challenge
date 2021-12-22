@@ -7,7 +7,7 @@ namespace Cesc\CMRad\Domain\Subject;
 use Cesc\CMRad\Domain\Subject\Exception\InvalidSubjectIdException;
 use Ramsey\Uuid\Uuid as RamseyUuid;
 
-class SubjectId
+final class SubjectId
 {
     /**
      * @param string $value
@@ -20,10 +20,4 @@ class SubjectId
             throw new InvalidSubjectIdException(sprintf('Invalid uuid format for %s', $value));
         }
     }
-
-    public function create()
-    {
-        RamseyUuid::uuid4()->toString();
-    }
-
 }

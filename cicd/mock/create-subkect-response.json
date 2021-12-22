@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/cmrad/v2/subjects/*",
+    "queryStringParameters": {
+      "catalog_id": ["*"],
+      "css_content": ["*"],
+      "preview": ["*"],
+      "metered_paywall_enabled": ["*"]
+    }
+  },
+  "response": {
+    "statusCode": 200,
+    "headers": {
+      "Content-Type":["application/json"]
+    },
+    "body": ""
+  }
+}

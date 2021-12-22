@@ -1,0 +1,23 @@
+services:
+  collective-minds-subjects:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+    container_name: collective-minds-subjects
+    env_file: local.env
+    command: "symfony server:start --no-tls"
+    networks:
+      - collective-minds
+    volumes:
+      - ../:/app/
+    ports:
+      - "8000:8000"
+
+  mock:
+    image: jordimartin/mmock
+    container_name: collective-minds-core-service-mock
+    ports:
+      - "8082:8082"
+      - "8083:8083"
+    volumes:
+      - ./mock:/config

@@ -49,6 +49,10 @@ class ComposerStaticInit2c0eabe20b18f0386ff67b3b1d53374c
             'Prophecy\\' => 9,
             'PhpParser\\' => 10,
         ),
+        'F' => 
+        array (
+            'Faker\\' => 6,
+        ),
         'D' => 
         array (
             'Doctrine\\Instantiator\\' => 22,
@@ -56,6 +60,7 @@ class ComposerStaticInit2c0eabe20b18f0386ff67b3b1d53374c
         ),
         'C' => 
         array (
+            'Cesc\\CMRad\\Tests\\' => 17,
             'Cesc\\CMRad\\' => 11,
         ),
         'B' => 
@@ -131,6 +136,10 @@ class ComposerStaticInit2c0eabe20b18f0386ff67b3b1d53374c
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
         ),
+        'Faker\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/fakerphp/faker/src/Faker',
+        ),
         'Doctrine\\Instantiator\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
@@ -138,6 +147,10 @@ class ComposerStaticInit2c0eabe20b18f0386ff67b3b1d53374c
         'DeepCopy\\' => 
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
+        ),
+        'Cesc\\CMRad\\Tests\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/tests',
         ),
         'Cesc\\CMRad\\' => 
         array (

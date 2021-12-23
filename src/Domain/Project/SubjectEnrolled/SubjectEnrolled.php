@@ -18,4 +18,19 @@ final class SubjectEnrolled
 
     }
 
+    public function subjectId(): SubjectId
+    {
+        return $this->subjectId;
+    }
+
+    public function projectId(): ProjectId
+    {
+        return $this->projectId;
+    }
+
+    public function subjectType(): SubjectType
+    {
+        return $this->subjectType;
+    }
+
 }

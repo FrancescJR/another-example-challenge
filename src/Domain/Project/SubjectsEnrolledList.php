@@ -33,6 +33,9 @@ final class SubjectsEnrolledList
         $this->subjects[] = $subjectEnrolled;
     }
 
+    /**
+     * @return SubjectEnrolled[]
+     */
     public function subjects(): array
     {
         return $this->subjects;

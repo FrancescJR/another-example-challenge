@@ -17,7 +17,7 @@ final class SubjectIdMotherObject
      * @return SubjectId
      * @throws InvalidSubjectIdException
      */
-    public function create(?string $value = null): SubjectId
+    public static function create(?string $value = null): SubjectId
     {
         return new SubjectId($value ?? Factory::create()->uuid);
     }

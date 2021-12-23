@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Cesc\CMRad\Domain\Subject;
 
 use Cesc\CMRad\Domain\Subject\Exception\InvalidSubjectIdException;
-use Ramsey\Uuid\Uuid as RamseyUuid;
+use Ramsey\Uuid\Uuid;
 
 final class SubjectId
 {
@@ -16,7 +16,7 @@ final class SubjectId
     public function __construct(
         public readonly string $value
     ) {
-        if (!RamseyUuid::isValid($value)) {
+        if (!Uuid::isValid($value)) {
             throw new InvalidSubjectIdException(sprintf('Invalid uuid format for %s', $value));
         }
     }

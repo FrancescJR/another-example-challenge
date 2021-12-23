@@ -13,7 +13,6 @@ class CustomerRepositoryIdTest extends TestCase
     public function testConstruct(): void
     {
         $repositoryId = new CustomerRepositoryId(CustomerRepositoryIdMotherObject::DEFAULT_ID);
-        echo CustomerRepositoryIdMotherObject::create()->value;
         self::assertEquals(CustomerRepositoryIdMotherObject::DEFAULT_ID, $repositoryId->value);
     }
 

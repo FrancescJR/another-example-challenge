@@ -2,9 +2,9 @@ services:
   collective-minds-subjects:
     build:
       context: ../
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./cicd/Dockerfile
     container_name: collective-minds-subjects
-    env_file: local.env
+    env_file: ../.env
     command: "symfony server:start --no-tls"
     networks:
       - collective-minds

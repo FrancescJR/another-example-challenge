@@ -89,9 +89,6 @@ That could be solved by a domain service using the repository, but I
 think this is too much over complication just to follow the books, so
 I am happy by having this part on the create subject handler command.
 
-I am not using any command bus at this stage of the development, but that
-could be an upgrade.
-
 #### Tests
 
 I am using prophecy here to try to follow the given when then
@@ -100,17 +97,14 @@ repositories and a cool upgrade would be to have
 prophecies repositories prepared for all the handlers, there would be
 some reduction of code duplication in that case.
 
-
-
 ### Infrastructure
 
-I tried to be as independent as possible from the framework
-TODO: I am using symfony skeleton, but I want to use
-my own skeleton and then put symfony controllers and DI
-on infra and also try the laravel controllers and DI in infra.
+There are the controllers here that call directly the command handlers
+without any bus. I like it this way at the start of the development.
+Command buses only make sense when you decorate them with exception listeners
+or other features that affect all the handlers.
 
-The implementation of the repositories are in Guzzle calls to
-the fake service core.
+There are the implementation of the repositories using the Guzzle APIclient
 
 ### CI/CD
 

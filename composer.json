@@ -13,19 +13,53 @@
       "Cesc\\CMRad\\Tests\\": "tests/"
     }
   },
-  "config": {
-    "bin-dir": "bin"
-  },
   "require": {
     "php": "^8.1",
+    "ext-ctype": "*",
+    "ext-iconv": "*",
+    "symfony/console": "6.0.*",
+    "symfony/dotenv": "6.0.*",
+    "symfony/flex": "^2",
+    "symfony/framework-bundle": "6.0.*",
+    "symfony/runtime": "6.0.*",
+    "symfony/yaml": "6.0.*",
     "symfony/config": "^5.4",
     "symfony/dependency-injection": "^5.4",
-    "symfony/yaml": "^5.1",
     "ramsey/uuid": "^4.2"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.5",
     "fakerphp/faker": "^1.17"
+  },
+  "config": {
+    "bin-dir": "bin",
+    "allow-plugins": {
+      "composer/package-versions-deprecated": true,
+      "symfony/flex": true,
+      "symfony/runtime": true
+    },
+    "optimize-autoloader": true,
+    "preferred-install": {
+      "*": "dist"
+    },
+    "sort-packages": true
+  },
+  "replace": {
+    "symfony/polyfill-ctype": "*",
+    "symfony/polyfill-iconv": "*",
+    "symfony/polyfill-php72": "*",
+    "symfony/polyfill-php73": "*",
+    "symfony/polyfill-php74": "*",
+    "symfony/polyfill-php80": "*"
+  },
+  "conflict": {
+    "symfony/symfony": "*"
+  },
+  "extra": {
+    "symfony": {
+      "allow-contrib": false,
+      "require": "6.0.*"
+    }
   },
   "scripts": {
     "destroy": [
@@ -33,6 +67,7 @@
       "docker-compose --file docker/docker-compose.yml rm -f",
       "docker volume rm offer-persistence"
     ],
+    "start": "cd cicd; docker compose up",
     "enter": "docker exec -it collective-minds-subjects bash",
     "stop": "docker-compose --file docker/docker-compose.yml stop",
     "logs": "docker-compose --file docker/docker-compose.yml logs -f",

@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[Route('/subjects/repository/{repositoryId}/subject', methods: ['POST'])]
 class CreateSubjectController
 {
     public function __construct(
@@ -19,7 +20,7 @@ class CreateSubjectController
     ) {
     }
 
-    #[Route('/subjects/repository/{repositoryId}/subject', methods: ['POST'])]
+
     public function __invoke(Request $request, string $repositoryId): JsonResponse
     {
         try {

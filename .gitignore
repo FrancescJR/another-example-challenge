@@ -7,3 +7,11 @@ vendor
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
+
+###> symfony/framework-bundle ###
+#not really needed now.
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+###< symfony/framework-bundle ###

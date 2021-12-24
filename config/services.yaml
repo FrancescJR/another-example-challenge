@@ -10,16 +10,42 @@ services:
         autowire: false
         autoconfigure: false
 
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
-    Cesc\CMRad\:
-        resource: '../src/'
-        exclude:
-            - '../src/Domain/'
-            - '../src/Kernel.php'
+    #I am not really a fan of autowire. We can add some general bindings and so on here
+    # to use specific implementations, and then group configuration for a shorter file
+    # but I'd rather explicitly explain what I am using.
+    # even though it might mean more writing.
+
+    # Use the fully qualified name for easier config on: routing, on whether adding command bus etc.
+
+    Cesc\CMRad\Application\Subject\CreateSubjectCommandHandler:
+        class: Cesc\CMRad\Application\Subject\CreateSubjectCommandHandler
+        arguments:
+            - '@api_repository.subjects'
+
+    Cesc\CMRad\Application\Project\EnrollSubjectCommandHandler:
+        class: Cesc\CMRad\Application\Project\EnrollSubjectCommandHandler
+        arguments:
+            - '@api_repository.projects'
+            - '@api_repository.subjects'
+
+    api_repository.projects:
+        class: Cesc\CMRad\Infrastructure\ApiClient\ProjectRepositoryCoreApiClient
+
+    api_repository.subjects:
+        class: Cesc\CMRad\Infrastructure\ApiClient\SubjectRepositoryCoreApiClient
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
-    Cesc\CMRad\Infrastructure\Controller\:
-        resource: '../src/Infrastructure/Controller/'
+
+    Cesc\CMRad\Infrastructure\Controller\Subject\CreateSubjectController:
+        class: Cesc\CMRad\Infrastructure\Controller\Subject\CreateSubjectController
+        arguments:
+            - '@Cesc\CMRad\Application\Subject\CreateSubjectCommandHandler'
         tags: [ 'controller.service_arguments' ]
+
+
+    Cesc\CMRad\Infrastructure\Controller\Project\EnrollSubjectController:
+        class: Cesc\CMRad\Infrastructure\Controller\Project\EnrollSubjectController
+        tags: [ 'controller.service_arguments' ]
+        arguments:
+            - '@Cesc\CMRad\Application\Project\EnrollSubjectCommandHandler'

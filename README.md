@@ -5,9 +5,9 @@
 
 
 
-# Description and decisions
+## Description and decisions
 
-## Domain
+### Domain
 
 There are three aggregate roots that build the domain, well
 actually two, since the customer repository at this point of development
@@ -18,12 +18,16 @@ ValueObjects are on the same directory where the entities that use
 them live. I separated the custom Exceptions on a sub folder to avoid
 cluttering this directory too much, but probably that was unnecessary.
 
-upgrade: create a domain exception and extend domain exceptions
-from this one instead of extending from PHP exception.
+_**upgrade**: create a domain exception and extend domain exceptions
+from this one instead of extending from PHP exception._
 
-upgrade: most value objects are about uuid type, an abstract
+_**upgrade**: most value objects are about uuid type, an abstract
 uuid value object could be created and the main check of checking whether
-it is a valid uuid should be done there, avoiding many code repetition.
+it is a valid uuid should be done there, avoiding many code repetition._
+
+_**alternative**: Identity for subjects and project could have the repository
+id inside, it should, it's just harder to map later to doctrine
+or to any other DB though later._
 
 There is a many-to-many relationship between projects and subjects.
 I believe both entities should be aggregate roots: subjects can
@@ -44,28 +48,61 @@ of this entity (on the SubjectIsEnrolled List). So projects as
 an aggregate root have
 a list of SubjectsEnrolled entities.
 
+_**Alternative**: instead of having the function enroll subject 
+in the project, a domain service could be created for that, that would
+easy just a little the command handler test. I am not fond though
+of domain services because they eventually lead to anemic models
+with non-rich entities._
+
 Subjects have also a list of projects, but being a different
 aggregate root, the list will get updated eventually (eventual
 consistency) via domain events.
 
-upgrade: CQRS and having a read model for subjects different than the write model
+_**upgrade**: CQRS and having a read model for subjects different than the write model
 done here. Add the list of projects on the read model and remove
 it from the write model: enrolling a subject to a project will
 update the read model, but the write model of subjects can keep
-without any modification
+without any modification_
 
-upgrade: Continuing with the above we can add event sourcing. We would
+_**upgrade**: Continuing with the above we can add event sourcing. We would
 have timestamps (well timestamps can also be added
 as value objects on the entity too of course)
 when the actions happened and the read model will
-be updated via projections.
+be updated via projections._
 
-## Application
+#### Tests
+
+I am using basically unit tests. To test everything I have to add
+some tests for the entity that's inside the aggregate root, but 
+I hope that by checking the project entity unit test, developer
+can understand how are they supposed to execute the domain, and 
+mimic it in the application layer.
+
+### Application
 
 The usage of the domain is explained in the domain tests. Application
 just mimic the tests and execute the domain as shown in the tests.
 
-## Infrastructure
+There is a bit of business domain logic on this layer: the constraint that
+the duplicity of subjects on the same repository is not allowed.
+That could be solved by a domain service using the repository, but I 
+think this is too much over complication just to follow the books, so
+I am happy by having this part on the create subject handler command.
+
+I am not using any command bus at this stage of the development, but that
+could be an upgrade.
+
+#### Tests
+
+I am using prophecy here to try to follow the given when then
+test structure. Most Command Handlers will work with 
+repositories and a cool upgrade would be to have
+prophecies repositories prepared for all the handlers, there would be
+some reduction of code duplication in that case.
+
+
+
+### Infrastructure
 
 I tried to be as independent as possible from the framework
 TODO: I am using symfony skeleton, but I want to use
@@ -75,18 +112,7 @@ on infra and also try the laravel controllers and DI in infra.
 The implementation of the repositories are in Guzzle calls to
 the fake service core.
 
-## Tests
-
-Unit tests for the domain explain how the domain should be executed.
-I am using mother objects to instantiate value objects and entities.
-
-upgrade: test application
-
-upgrade: test infra endpoint
-
-upgrade: grouping of code as in VO could have been
-
-## CI/CD
+### CI/CD
 
 Docker Compose for local development, I would just need an image
 but I am using the mock image to pretend I am calling
@@ -96,14 +122,6 @@ I am using symfony service just to go fast, but for production
 I would just add an nginx image. Docker compose would also 
 use the nginx image. The closer the development environment
 is to production the better.
-
-
-
-
-
-
-
-
 
 
 # Comments

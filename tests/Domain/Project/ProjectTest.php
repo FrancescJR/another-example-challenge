@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cesc\CMRad\Tests\Domain\Project;
 
+use Cesc\CMRad\Domain\Project\Exception\SubjectAlreadyEnrolledException;
 use Cesc\CMRad\Domain\Project\Project;
 use Cesc\CMRad\Domain\Project\SubjectEnrolled\SubjectType;
 use Cesc\CMRad\Domain\Project\SubjectsEnrolledList;
@@ -51,6 +52,16 @@ class ProjectTest extends TestCase
             }
         }
         return false;
+    }
+
+    public function testCantEnrollTheSameSubject()
+    {
+        self::expectException(SubjectAlreadyEnrolledException::class);
+        $subjectId = SubjectIdMotherObject::create();
+        $project = ProjectMotherObject::create();
+
+        $project->enrollSubject($subjectId, SubjectType::CONTROL);
+        $project->enrollSubject($subjectId, SubjectType::CONTROL);
     }
 
 }

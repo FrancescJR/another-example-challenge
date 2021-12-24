@@ -7,17 +7,17 @@ namespace Cesc\CMRad\Domain\Project;
 use Cesc\CMRad\Domain\CustomerRepository\CustomerRepositoryId;
 use Cesc\CMRad\Domain\Project\SubjectEnrolled\SubjectEnrolled;
 use Cesc\CMRad\Domain\Project\SubjectEnrolled\SubjectType;
-use Cesc\CMRad\Domain\Subject\Subject;
 use Cesc\CMRad\Domain\Subject\SubjectId;
 
-final class Project
+class Project
 {
     private SubjectsEnrolledList $subjectsEnrolledList;
 
     /**
      * @param ProjectId $id
      * @param CustomerRepositoryId $customerRepositoryId
-     * @throws Exception\InvalidCollectionTypeException
+     * @throws Exception\InvalidCollectionTypeException|
+     * @throws Exception\SubjectAlreadyEnrolledException
      */
     public function __construct(
         private ProjectId $id,

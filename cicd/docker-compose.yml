@@ -6,8 +6,6 @@ services:
     container_name: collective-minds-subjects
     env_file: ../.env
     command: "symfony server:start --no-tls"
-    networks:
-      - collective-minds
     volumes:
       - ../:/app/
     ports:

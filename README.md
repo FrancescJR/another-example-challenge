@@ -104,6 +104,10 @@ without any bus. I like it this way at the start of the development.
 Command buses only make sense when you decorate them with exception listeners
 or other features that affect all the handlers.
 
+There is a basic validation of the request. Another possible upgrade would
+be to add this validation in a decoration of the command bus. Right now
+it's just faster this way.
+
 There are the implementation of the repositories using the Guzzle APIclient
 
 ### CI/CD
@@ -120,9 +124,14 @@ is to production the better.
 
 # Comments
 
-## About the big picture
+## About the challenge
 
-I have been itching a little doing this challenge. Taking into account the whole
+I really liked the test, I have might gone the extra mile, or 10 extra
+miles, but it could have been done way faster and still it would show
+how developers think and work.
+
+But there is a big issue with the description and how it is presented
+from my point of view. Taking into account the whole
 description, it means that this service is supposed
 to be like a way to call another API. AKA a proxy. A proxy it should not have any logic, 
 especially not domain logic.

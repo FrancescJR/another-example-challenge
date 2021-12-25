@@ -21,7 +21,7 @@ class CreateSubjectController
     ) {
     }
 
-    #[Route('/subjects/repository/{repositoryId}/subject', methods: ['POST'])]
+    #[Route('/subject', methods: ['POST'])]
     public function __invoke(Request $request, string $repositoryId): JsonResponse
     {
         try {
@@ -32,8 +32,11 @@ class CreateSubjectController
                     $repositoryId
                 )
             );
-        } catch (Exception) {
-            return new JsonResponse([], Response::HTTP_BAD_REQUEST);
+        } catch (Exception $exception) {
+            return new JsonResponse(
+                ['error' => $exception->getMessage()],
+                Response::HTTP_BAD_REQUEST
+            );
         }
         return new JsonResponse([], Response::HTTP_CREATED);
     }

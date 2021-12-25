@@ -21,7 +21,7 @@ class EnrollSubjectController
     ) {
     }
 
-    #[Route('/subjects/repository/{repositoryId}/project/{projectId}', methods: ['PUT'])]
+    #[Route('/project/{projectId}', methods: ['PUT'])]
     public function __invoke(Request $request, string $repositoryId, string $projectId): JsonResponse
     {
         try {
@@ -34,8 +34,11 @@ class EnrollSubjectController
                     $requestContent['subject_type'],
                 )
             );
-        } catch (Exception) {
-            return new JsonResponse([], Response::HTTP_BAD_REQUEST);
+        } catch (Exception $exception) {
+            return new JsonResponse(
+                ['error' => $exception->getMessage()],
+                Response::HTTP_BAD_REQUEST
+            );
         }
         return new JsonResponse();
     }

@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    core_service.base_url: 'ENV(coreservice)'
 
 services:
     _defaults:
@@ -30,9 +31,20 @@ services:
 
     api_repository.projects:
         class: Cesc\CMRad\Infrastructure\ApiClient\ProjectRepositoryCoreApiClient
+        arguments:
+            - '@guzzlehttp.client'
+            - '%core_service.base_url%'
 
     api_repository.subjects:
         class: Cesc\CMRad\Infrastructure\ApiClient\SubjectRepositoryCoreApiClient
+        arguments:
+            - '@guzzlehttp.client'
+            - '%core_service.base_url%'
+
+    # APi Clients
+    guzzlehttp.client:
+        class: GuzzleHttp\Client
+        lazy: true
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class

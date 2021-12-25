@@ -4,7 +4,7 @@ services:
       context: ../
       dockerfile: ./cicd/Dockerfile
     container_name: collective-minds-subjects
-    env_file: ../.env
+    env_file: ../.env #env.local on gitignore,
     command: "symfony server:start --no-tls"
     volumes:
       - ../:/app/

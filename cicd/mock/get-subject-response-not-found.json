@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repositories/*/subjects/a066f75d-43e1-3966-a068-769b985cc04a"
+  },
+  "response": {
+    "statusCode": 404,
+    "headers": {
+      "Content-Type":["application/json"]
+    },
+    "body": ""
+  }
+}

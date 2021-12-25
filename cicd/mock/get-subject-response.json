@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repositories/*/subjects/*"
+  },
+  "response": {
+    "statusCode": 200,
+    "headers": {
+      "Content-Type":["application/json"]
+    },
+    "body": "{ \"customer_repository_id\": \"9066f75d-43e1-3966-a068-769b985cc047\", \"id\": \"a066f75d-43e1-3966-a068-769b985cc04a\"}"
+  }
+}

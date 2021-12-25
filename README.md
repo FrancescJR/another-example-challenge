@@ -108,7 +108,14 @@ There is a basic validation of the request. Another possible upgrade would
 be to add this validation in a decoration of the command bus. Right now
 it's just faster this way.
 
-There are the implementation of the repositories using the Guzzle APIclient
+There are the implementation of the repositories using the Guzzle APIclient.
+upgrade: We could have some kind of abstract class too.
+upgrade: better treatment of exceptionss, with custom ones.
+upgrade: exception listener
+
+upgrade: anticorruption layer more elaborate to create the domain
+objects on that 
+
 
 ### CI/CD
 

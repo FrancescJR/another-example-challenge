@@ -16,29 +16,31 @@ POST http://localhost:8000/subjects/v1/repository/9066f75d-43e1-3966-a068-769b98
 (any valid uuid is OK)
 with body
 
-`{
-"id": "a066f75d-43e1-3966-a068-769b985cc04a"
-}`
+```
+{
+    "id": "a066f75d-43e1-3966-a068-769b985cc04a"
+}
+```
 
 Try any other valid UUID for a "subject already exists exception".
 
 ## Enroll Subject on Project
 
-PUT 
-
-POST http://localhost:8000/subjects/v1/repository/9066f75d-43e1-3966-a068-769b985cc047/project/9066f75d-43e1-3966-a068-769b985cc047
+PUT http://localhost:8000/subjects/v1/repository/9066f75d-43e1-3966-a068-769b985cc047/project/9066f75d-43e1-3966-a068-769b985cc047
 
 (any valid uuid is OK)
 with body
 
-`{
-"subject_id": "a066f75d-43e1-3966-a068-769b985cc045",
-"subject_type": "control"
-}`
+```
+{
+    "subject_id": "a066f75d-43e1-3966-a068-769b985cc045",
+    "subject_type": "control"
+}
+```
 
-subject_id: any valid uuid except the one used above, (it is the only uuid that
+* subject_id: any valid uuid except the one used above, (it is the only uuid that
 the "core service" returns a not found.)
-subject_type: one of control/recipient
+* subject_type: one of control/recipient
 
 # Description and decisions
 

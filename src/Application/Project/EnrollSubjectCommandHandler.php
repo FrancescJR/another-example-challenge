@@ -7,6 +7,7 @@ namespace Cesc\CMRad\Application\Project;
 use Cesc\CMRad\Domain\CustomerRepository\CustomerRepositoryId;
 use Cesc\CMRad\Domain\CustomerRepository\Exception\InvalidCustomerRepositoryIdException;
 use Cesc\CMRad\Domain\Project\Exception\InvalidProjectIdException;
+use Cesc\CMRad\Domain\Project\Exception\InvalidSubjectTypeException;
 use Cesc\CMRad\Domain\Project\ProjectId;
 use Cesc\CMRad\Domain\Project\ProjectRepositoryInterface;
 use Cesc\CMRad\Domain\Project\SubjectEnrolled\SubjectType;
@@ -30,6 +31,7 @@ class EnrollSubjectCommandHandler
      * @throws InvalidCustomerRepositoryIdException
      * @throws InvalidProjectIdException
      * @throws InvalidSubjectIdException
+     * @throws InvalidSubjectTypeException
      */
     public function __invoke(EnrollSubjectCommand $command): void
     {
@@ -51,7 +53,7 @@ class EnrollSubjectCommandHandler
             throw new SubjectNotFoundException();
         }
 
-        $project->enrollSubject($subjectId, SubjectType::from($command->subjectType));
+        $project->enrollSubject($subjectId, SubjectType::fromString($command->subjectType));
 
         $this->projectRepository->save($project);
     }

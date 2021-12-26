@@ -8,11 +8,15 @@ and using DDD principles.
 * Docker.
 * PHP composer (Check dockerfile on how to install)
 
-
 ### Usage
 
-Execute `composer start` at the root of the project. Make sure you don't 
+Execute `composer install` and then `composer start` at the root of the project. Make sure you don't 
 have anything already listening on port 8000.
+
+To stop it execute `composer stop`. `Composer destroy` to remove all the 
+docker images.
+
+To execute tests do `bin/phpunit` or `composer tests` if the images are running.
 
 #### Create subject
 
@@ -187,7 +191,8 @@ repetition.
 
 #### Exceptions
 Domain and application exceptions. Symfony exception listener for
-infrastructure exception and appropriate responses
+infrastructure exception and appropriate responses (also
+for framework exceptions like routes not found)
 
 ### Application
 #### Command bus

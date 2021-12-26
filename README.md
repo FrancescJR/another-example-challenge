@@ -1,15 +1,20 @@
-# Requirements
+# Collective Minds Rad Technical challenge
+
+Solution with hexagonal architecture, Symfony 6.0 as framework, PHP 8.1
+and using DDD principles.
+
+## Requirements
 
 * Docker.
 * PHP composer (Check dockerfile on how to install)
 
 
-# Usage
+### Usage
 
 Execute `composer start` at the root of the project. Make sure you don't 
 have anything already listening on port 8000.
 
-## Create subject
+#### Create subject
 
 POST http://localhost:8000/subjects/v1/repository/9066f75d-43e1-3966-a068-769b985cc047/subject
 
@@ -24,7 +29,7 @@ with body
 
 Try any other valid UUID for a "subject already exists exception".
 
-## Enroll Subject on Project
+#### Enroll Subject on Project
 
 PUT http://localhost:8000/subjects/v1/repository/9066f75d-43e1-3966-a068-769b985cc047/project/9066f75d-43e1-3966-a068-769b985cc047
 
@@ -42,155 +47,28 @@ with body
 the "core service" returns a not found.)
 * subject_type: one of control/recipient
 
-# Description and decisions
+## Description and decisions
 
+### First some words about the challenge
 
-
-### Domain
-
-There are three aggregate roots that build the domain, well
-actually two, since the customer repository at this point of development
-is not needed, we just need the ID to reference it on the other
-aggregates. The other two aggregate roots are projects and subjects.
-
-ValueObjects are on the same directory where the entities that use
-them live. I separated the custom Exceptions on a sub folder to avoid
-cluttering this directory too much, but probably that was unnecessary.
-
-_**upgrade**: create a domain exception and extend domain exceptions
-from this one instead of extending from PHP exception._
-
-_**upgrade**: most value objects are about uuid type, an abstract
-uuid value object could be created and the main check of checking whether
-it is a valid uuid should be done there, avoiding many code repetition._
-
-_**alternative**: Identity for subjects and project could have the repository
-id inside, it should, it's just harder to map later to doctrine
-or to any other DB though later._
-
-There is a many-to-many relationship between projects and subjects.
-I believe both entities should be aggregate roots: subjects can
-and should be created independently, as it's shown on the core API
-(only the customer repository ID where they belong is needed), and
-the exact same for projects.
-
-Also I understood that subjects are enrolled in projects as either
-control or recipients.
-
-Taking into account both facts, I created a new entity, SubjectEnrolled,
-that represents the relationship and explains the subject's type.
-Having it in an entity it will make it easier to map in a 
-relational database too.
-
-I decided it makes more sense to make the projects have the list
-of this entity (on the SubjectIsEnrolled List). So projects as
-an aggregate root have
-a list of SubjectsEnrolled entities.
-
-_**Alternative**: instead of having the function enroll subject 
-in the project, a domain service could be created for that, that would
-easy just a little the command handler test. I am not fond though
-of domain services because they eventually lead to anemic models
-with non-rich entities._
-
-Subjects have also a list of projects, but being a different
-aggregate root, the list will get updated eventually (eventual
-consistency) via domain events.
-
-_**upgrade**: CQRS and having a read model for subjects different than the write model
-done here. Add the list of projects on the read model and remove
-it from the write model: enrolling a subject to a project will
-update the read model, but the write model of subjects can keep
-without any modification_
-
-_**upgrade**: Continuing with the above we can add event sourcing. We would
-have timestamps (well timestamps can also be added
-as value objects on the entity too of course)
-when the actions happened and the read model will
-be updated via projections._
-
-#### Tests
-
-I am using basically unit tests. To test everything I have to add
-some tests for the entity that's inside the aggregate root, but 
-I hope that by checking the project entity unit test, developer
-can understand how are they supposed to execute the domain, and 
-mimic it in the application layer.
-
-### Application
-
-The usage of the domain is explained in the domain tests. Application
-just mimic the tests and execute the domain as shown in the tests.
-
-There is a bit of business domain logic on this layer: the constraint that
-the duplicity of subjects on the same repository is not allowed.
-That could be solved by a domain service using the repository, but I 
-think this is too much over complication just to follow the books, so
-I am happy by having this part on the create subject handler command.
-
-#### Tests
-
-I am using prophecy here to try to follow the given when then
-test structure. Most Command Handlers will work with 
-repositories and a cool upgrade would be to have
-prophecies repositories prepared for all the handlers, there would be
-some reduction of code duplication in that case.
-
-### Infrastructure
-
-There are the controllers here that call directly the command handlers
-without any bus. I like it this way at the start of the development.
-Command buses only make sense when you decorate them with exception listeners
-or other features that affect all the handlers.
-
-There is a basic validation of the request. Another possible upgrade would
-be to add this validation in a decoration of the command bus. Right now
-it's just faster this way.
-
-There are the implementation of the repositories using the Guzzle APIclient.
-upgrade: We could have some kind of abstract class too.
-upgrade: better treatment of exceptionss, with custom ones.
-upgrade: exception listener
-
-upgrade: anticorruption layer more elaborate to create the domain
-objects on that 
-
-
-### CI/CD
-
-Docker Compose for local development, I would just need an image
-but I am using the mock image to pretend I am calling
-the core service.
-
-I am using symfony service just to go fast, but for production
-I would just add an nginx image. Docker compose would also 
-use the nginx image. The closer the development environment
-is to production the better.
-
-
-# Comments
-
-## About the challenge
-
-I really liked the test, I have might gone the extra mile, or 10 extra
-miles, but it could have been done way faster and still it would show
-how developers think and work.
+I really liked the test, it can be done fast (I didn't) and it shows
+very nicely how developers work.
 
 But there is a big issue with the description and how it is presented
 from my point of view. Taking into account the whole
 description, it means that this service is supposed
-to be like a way to call another API. AKA a proxy. A proxy it should not have any logic, 
+to be like a way to call another API. AKA a proxy. A proxy it should not have any logic,
 especially not domain logic.
 
 I understand that this might be
 a temporary solution for moving from a big monolith to independent services
-but if that is not the case then 
+but if that is not the case then
 I would strongly recommend against this way of developing APIs. The result
 of this is a duplication of maintenance work: the one in the core API
 and the one in the proxy, and a source of troubleshooting and bugs.
 
 The domain logic should exist in only one place. If subjects logic is going
-to be in this service then it should be removed from the Core API. For instance, 
+to be in this service then it should be removed from the Core API. For instance,
 the creation of subjects, shouldn't be in the core API anymore. If you
 want to filter data, that should be done in the place where the data to be
 filtered actually exists, not somewhere else.
@@ -202,7 +80,7 @@ business logic belongs to the same bounded context.
 
 APIs are especially meant to be exposed to external systems (that should apply
 to the core API too). The limitations
-shouldn't be not making them accessible. The limitations 
+shouldn't be not making them accessible. The limitations
 should be about adding usage limits and authentication and authorization of this usage.
 API gateways will give you of the shelf solutions to that, and for the fine-grained
 permissions and others that require actual
@@ -210,30 +88,131 @@ business knowledge, those can be implemented on the service itself.
 
 API Gateways will allow you also to have the system in an internal network.
 If that is the actual fear. (You can just have a proxy for the same, but
-insisting again and being very adamant, this proxy should not have any 
+insisting again and being very adamant, this proxy should not have any
 business logic)
 
-## About projects and subjects
+======
 
-Seeing the example endpoints of the core service, it feels like
-there is a circular reference between projects and subjects.
-POST on a project inside a subject and also a POST of a subject
-inside a project. I would strongly recommend choosing just one
-to simplify the domain greatly (for example, I
-just chose that projects have more weight
-and that they have subjects inside, then with
-eventual consistency we can maybe update subjects,
-if they have a list of projects were they belong to,
-but is that list really necessary?). And it will be easier to 
-maintain API restful constraints.
+Now having said that, these are some explanations of the code:
 
-## About the diagram.
+I hope the code is enough self-explanatory. There are 3 aggregate roots even
+though one, the customer repository ID, since it is not required to
+create or work on it, I just created the value object id so the other
+two aggregates roots can reference to.
 
-There are two extra numbers on the 
-repository subject relationship, I believe those
-are leftovers from a previous diagram. The relationship
-between projects and subjects, it's specified as at least 1..*
-on each direction. That means that a subject can not exist without
-a project and vice-versa, a project can not exist without a
-subject. I'd recommend changing that to 0..*.
+There is a bit of business domain logic on the application layer: 
+the constraint that
+the duplicity of subjects on the same repository is not allowed.
+That could be solved by a domain service using the repository, but I
+think this is too much over complication just to follow the books, so
+I am happy by having this part on the create subject handler command.
 
+The most tricky part of the challenge is the many-to-many relationship
+of two aggregates subjects and projects, where subjects are enrolled in
+projects. I assumed that a subject can be enrolled in a project as either
+control or recipient.
+
+For that reason I though that a good way to solve
+it is by creating a new entity, SubjectEnrolled,
+that represents the relationship and explains the subject's type.
+Having it in an entity it will make it easier to map in a
+relational database too. I thought it made more sense to have this list
+under project aggregate root.
+
+_**Alternative**: instead of having the function enroll subject
+in the project, a domain service could be created for that, that would
+easy just a little the command handler test. I am not fond though
+of domain services because they eventually lead to anemic models
+with non-rich entities._
+
+#### Breaking the rules of aggregates
+
+Taking into account that this is a proxy. It would make more sense
+to just call the POST to the core service when enrolling a subject.
+
+With the added domain logic, there is an issue when saving the project
+and it is that it can't be saved in a single "transaction". Here transactions
+are calls to the core service. And there is a call for each relation.
+
+To make just the call that we want, I could assume that from the core
+service, when I get the aggregate project, I get it, of course, with the list
+of subjects enrolled, and then make just the repository call to
+`enrollProjectOnCoreService` function 
+with the exact subject that is being added.
+(that's why this function is public,
+probably calling that instead of "save" is a better solution than the one
+I am sending).That doesn't feel like a natural
+function for a repository, and after all, this is implemented on the
+infrastructure. Domain logic went all the way to the infra (not that bad
+as the other way around). But the whole thing could be prevented by
+not using a proxy in the first place and putting the logic in the bounded
+context where the domain lives.
+
+#### What if subjects had a list of projects enrolled?
+
+You might have noticed that I don't do anything with subjects when
+enrolling a subject in a project. I am maintaining independence of aggregate
+roots. Subjects don't even have a list of projects, but what if they had?
+
+That should be solved by triggering a domain event when the subject
+is enrolled to the project and have some listeners to act upon this
+triggering.
+
+One subscriber could trigger an application service of
+adding the project in the project list of the subjects, and save the subjects.
+
+We could even go further and have two different models for subject:
+the one that you see (would be the write model) and the read one, and
+only this one with the list of projects.
+
+Another subscriber could update just the read model, (just project
+the domain event on the read model). The read model could use an infra
+faster for get queries like elastic search.
+
+But adding CQRS on a service that is meant to just be a proxy doesn't make
+much sense.
+
+
+## Minor upgrades (TODO list)
+
+### Domain
+#### Identity of aggregate roots
+Identity for subjects and project could have the repository
+id inside, it should, it's just harder to map later to doctrine
+or to any other DB though later.
+
+#### Abstract Value Objects
+For uuid at least. Current VO to extend from the abstract to avoid code
+repetition.
+
+#### Exceptions
+Domain and application exceptions. Symfony exception listener for
+infrastructure exception and appropriate responses
+
+### Application
+#### Command bus
+Tactitian or Symfony bus as command bus for some decoration. At this stage
+though only the exception treatment can be solved with decoration.
+And request validation.
+
+#### Abstract Tests
+For controllers and command handlers, and better usage of prophecy
+and extendable. Use prophecies as if we had an implementation
+of repositories that are shared among handlers.
+
+### Infrastructure
+#### Anticorruption layer on the Core Service API
+I am assuming that the core service will work as expected and there's little
+error handling. A facade plus an implementation to create the domain
+objects from the http calls will be nice.
+
+#### framework independent skeleton (big change)
+This is using symfony skeleton (directory structure). It would be
+nice to put all that symfony need to work under the infrastructure
+directory. And have for example Laravel there working too.
+
+### CI/CD
+#### Php fpm instead of symfony server
+Symfony server is useful because it's fast. But it's a must to have
+dev environment as close to prod as possible. Symfony server is not
+recommended for production.

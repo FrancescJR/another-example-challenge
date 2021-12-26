@@ -34,7 +34,7 @@ class CreateSubjectController
             );
         } catch (Exception $exception) {
             return new JsonResponse(
-                ['error' => $exception->getMessage()],
+                ['error' => $exception->getMessage() . $exception::class],
                 Response::HTTP_BAD_REQUEST
             );
         }

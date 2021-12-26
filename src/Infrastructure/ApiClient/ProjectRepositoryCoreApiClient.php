@@ -16,8 +16,8 @@ use Cesc\CMRad\Domain\Project\SubjectEnrolled\SubjectEnrolled;
 
 class ProjectRepositoryCoreApiClient extends CoreServiceApiClient implements ProjectRepositoryInterface
 {
-    public const GET_PROJECT = self::BASE_ENDPOINT . '/projects/%projectId';
-    public const ENROLL_SUBJECT = self::BASE_ENDPOINT . '/projects/%projectId/subjects/%subjectId';
+    public const GET_PROJECT = self::BASE_ENDPOINT . '/projects/%s';
+    public const ENROLL_SUBJECT = self::BASE_ENDPOINT . '/projects/%s/subjects/%s';
 
     /**
      * @param ProjectId $projectId

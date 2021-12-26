@@ -64,15 +64,13 @@
   },
   "scripts": {
     "destroy": [
-      "docker-compose --file docker/docker-compose.yml down",
-      "docker-compose --file docker/docker-compose.yml rm -f",
-      "docker volume rm offer-persistence"
+      "docker-compose --file cicd/docker-compose.yml down",
+      "docker-compose --file cicd/docker-compose.yml rm -f"
     ],
     "start": "cd cicd; docker compose up",
     "enter": "docker exec -it collective-minds-subjects bash",
-    "stop": "docker-compose --file docker/docker-compose.yml stop",
-    "logs": "docker-compose --file docker/docker-compose.yml logs -f",
-    "services": "docker-compose --file docker/docker-compose.yml ps",
+    "stop": "cd cicd; docker compose  stop",
+    "logs": "cd cicd; docker compose logs -f",
     "test": [
       "@test.application",
       "@test.domain",

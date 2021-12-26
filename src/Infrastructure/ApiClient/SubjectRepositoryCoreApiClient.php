@@ -15,7 +15,7 @@ use Cesc\CMRad\Domain\Subject\SubjectRepositoryInterface;
 class SubjectRepositoryCoreApiClient extends CoreServiceApiClient implements SubjectRepositoryInterface
 {
 
-    public const GET_SUBJECT = self::BASE_ENDPOINT . '/subjects/%subjectId';
+    public const GET_SUBJECT = self::BASE_ENDPOINT . '/subjects/%s';
     public const POST_SUBJECT = self::BASE_ENDPOINT . '/subjects';
 
     /**
@@ -32,6 +32,7 @@ class SubjectRepositoryCoreApiClient extends CoreServiceApiClient implements Sub
             'GET',
             sprintf($this->baseUrl . self::GET_SUBJECT, $customerRepositoryId->value, $subjectId->value)
         );
+
         return $coreServiceSubject ? new Subject(
             new SubjectId($coreServiceSubject['id']),
             new CustomerRepositoryId($coreServiceSubject['customer_repository_id'])

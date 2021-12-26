@@ -1,11 +1,48 @@
 # Requirements
 
+* Docker.
+* PHP composer (Check dockerfile on how to install)
+
 
 # Usage
 
+Execute `composer start` at the root of the project. Make sure you don't 
+have anything already listening on port 8000.
+
+## Create subject
+
+POST http://localhost:8000/subjects/v1/repository/9066f75d-43e1-3966-a068-769b985cc047/subject
+
+(any valid uuid is OK)
+with body
+
+`{
+"id": "a066f75d-43e1-3966-a068-769b985cc04a"
+}`
+
+Try any other valid UUID for a "subject already exists exception".
+
+## Enroll Subject on Project
+
+PUT 
+
+POST http://localhost:8000/subjects/v1/repository/9066f75d-43e1-3966-a068-769b985cc047/project/9066f75d-43e1-3966-a068-769b985cc047
+
+(any valid uuid is OK)
+with body
+
+`{
+"subject_id": "a066f75d-43e1-3966-a068-769b985cc045",
+"subject_type": "control"
+}`
+
+subject_id: any valid uuid except the one used above, (it is the only uuid that
+the "core service" returns a not found.)
+subject_type: one of control/recipient
+
+# Description and decisions
 
 
-## Description and decisions
 
 ### Domain
 

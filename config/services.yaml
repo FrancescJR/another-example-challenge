@@ -18,46 +18,15 @@ services:
 
     # Use the fully qualified name for easier config on: routing, on whether adding command bus etc.
 
-    Cesc\CMRad\Application\Subject\CreateSubjectCommandHandler:
-        class: Cesc\CMRad\Application\Subject\CreateSubjectCommandHandler
-        arguments:
-            - '@api_repository.subjects'
-
-    Cesc\CMRad\Application\Project\EnrollSubjectCommandHandler:
-        class: Cesc\CMRad\Application\Project\EnrollSubjectCommandHandler
-        arguments:
-            - '@api_repository.projects'
-            - '@api_repository.subjects'
-
-    api_repository.projects:
-        class: Cesc\CMRad\Infrastructure\ApiClient\ProjectRepositoryCoreApiClient
-        arguments:
-            - '@guzzlehttp.client'
-            - '%core_service.base_url%'
-
-    api_repository.subjects:
-        class: Cesc\CMRad\Infrastructure\ApiClient\SubjectRepositoryCoreApiClient
-        arguments:
-            - '@guzzlehttp.client'
-            - '%core_service.base_url%'
-
-    # APi Clients
-    guzzlehttp.client:
-        class: GuzzleHttp\Client
-        lazy: true
-
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
 
-    Cesc\CMRad\Infrastructure\Controller\Subject\CreateSubjectController:
-        class: Cesc\CMRad\Infrastructure\Controller\Subject\CreateSubjectController
-        arguments:
-            - '@Cesc\CMRad\Application\Subject\CreateSubjectCommandHandler'
+    Cesc\Prima\Infrastructure\Controller\PrimaController:
+        class: Cesc\Prima\Infrastructure\Controller\PrimaController
         tags: [ 'controller.service_arguments' ]
 
 
-    Cesc\CMRad\Infrastructure\Controller\Project\EnrollSubjectController:
-        class: Cesc\CMRad\Infrastructure\Controller\Project\EnrollSubjectController
-        tags: [ 'controller.service_arguments' ]
-        arguments:
-            - '@Cesc\CMRad\Application\Project\EnrollSubjectCommandHandler'
+
+    Cesc\Prima\Infrastructure\Command\PrimaCommand:
+        class: Cesc\Prima\Infrastructure\Command\PrimaCommand
+        tags: [ 'console.command' ]

@@ -1,6 +1,6 @@
 <?php
 
-use Cesc\CMRad\Kernel;
+use Cesc\Prima\Kernel;
 
 require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
 

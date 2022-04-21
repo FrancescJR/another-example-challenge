@@ -1,6 +1,6 @@
 <?php
 
-namespace Cesc\CMRad;
+namespace Cesc\Prima;
 
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;

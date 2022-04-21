@@ -1,7 +1,6 @@
 controllers:
     resource: ../src/Infrastructure/Controller/
     type: annotation
-    prefix: /subjects/v1/repository/{repositoryId}
 
 kernel:
     resource: ../src/Kernel.php

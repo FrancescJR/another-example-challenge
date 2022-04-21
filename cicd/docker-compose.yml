@@ -1,21 +1,12 @@
 services:
-  collective-minds-subjects:
+  prima:
     build:
       context: ../
       dockerfile: ./cicd/Dockerfile
-    container_name: collective-minds-subjects
+    container_name: prima
     env_file: ../.env #env.local on gitignore,
     command: "symfony server:start --no-tls"
     volumes:
       - ../:/app/
     ports:
       - "8000:8000"
-
-  mock:
-    image: jordimartin/mmock
-    container_name: collective-minds-core-service-mock
-    ports:
-      - "8082:8082"
-      - "8083:8083"
-    volumes:
-      - ./mock:/config
